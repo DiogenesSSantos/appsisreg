@@ -5,11 +5,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.github.diogenessantos.appsisreg.databinding.ActivityArquivoMortoBinding
+import com.github.diogenessantos.appsisreg.viewmodel.ArquivoMortoViewModel
 
 class ArquivoMortoActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityArquivoMortoBinding
-
+    private val arquivoMortoViewModel by lazy { ArquivoMortoViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +18,7 @@ class ArquivoMortoActivity : AppCompatActivity(){
         setContentView(binding.root)
         configurarErro()
         configurarBotaoBuscarSubstituir()
-
+        configurarViewModel()
     }
 
     private fun configurarErro(){
@@ -34,9 +35,23 @@ class ArquivoMortoActivity : AppCompatActivity(){
 
     private fun configurarBotaoBuscarSubstituir(){
         binding.tflCfpsusLayout.setEndIconOnClickListener {
-            Log.w("btn_buscar", "clicou no buscar e substituir.", )
+            val cpfOuSus = binding.etCpfOuSus.text?.toString() ?:""
+            Log.i("CPFouSUS", "dados = $cpfOuSus ")
+            if (!cpfOuSus.isBlank())arquivoMortoViewModel.carregarViewModelUsuario(cpfOuSus)
         }
     }
 
+    private fun configurarViewModel(){
+        arquivoMortoViewModel.usuario.observe(this, {
+            val usuario = it
+            if (usuario != null) {
+                binding.etNome.setText(usuario.nome)
+                binding.etDataNascimento.setText(usuario.dataNascimento)
+                binding.etCpf.setText(usuario.cpf)
+                binding.etNomeMae.setText(usuario.nomeMae)
+                binding.etBairro.setText(usuario.bairro)
+            }
+        })
+    }
 
 }

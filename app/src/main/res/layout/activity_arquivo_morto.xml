@@ -106,6 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_nomeMae"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
